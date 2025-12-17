@@ -39,6 +39,19 @@
                 <span id="speedValue">Medium</span>
             </div>
 
+            <!-- NEW: Custom Array Input -->
+            <div class="control-group">
+                <label for="customArray"><i class="fas fa-edit"></i> Custom Array:</label>
+                <div class="custom-array-input">
+                    <input type="text" id="customArray" placeholder="e.g., 45,23,78,12,56" 
+                           pattern="^[\d,\s]+$" title="Comma-separated numbers only">
+                    <button id="useCustomArray" class="btn btn-small">
+                        <i class="fas fa-check"></i> Use
+                    </button>
+                </div>
+                <small class="hint">Enter 5-100 numbers (1-1000) separated by commas</small>
+            </div>
+
             <div class="control-group">
                 <button id="generateArray" class="btn"><i class="fas fa-random"></i> New Array</button>
                 <button id="startSort" class="btn btn-primary"><i class="fas fa-play"></i> Sort</button>

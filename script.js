@@ -59,22 +59,6 @@ class SortingVisualizer {
         this.draw();
     }
     
-    generateSortedArray() {
-        this.array = [];
-        const min = 10;
-        const max = this.canvas.height - 50;
-        const step = (max - min) / this.arraySize;
-        
-        for (let i = 0; i < this.arraySize; i++) {
-            this.array.push({
-                value: Math.floor(min + i * step),
-                color: this.colors.default
-            });
-        }
-        this.resetStats();
-        this.draw();
-    }
-    
     resetStats() {
         this.comparisons = 0;
         this.swaps = 0;
@@ -170,6 +154,82 @@ class SortingVisualizer {
             this.stopSorting();
             this.generateRandomArray();
         });
+        
+        // Custom array input
+        document.getElementById('useCustomArray').addEventListener('click', () => {
+            this.useCustomArray();
+        });
+        
+        document.getElementById('customArray').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                this.useCustomArray();
+            }
+        });
+        
+        // Real-time validation for custom array input
+        document.getElementById('customArray').addEventListener('input', (e) => {
+            const input = e.target.value;
+            if (this.isValidArrayInput(input) || input.trim() === '') {
+                e.target.setCustomValidity('');
+            } else {
+                e.target.setCustomValidity('Please enter 5-100 numbers (1-1000) separated by commas');
+            }
+        });
+    }
+    
+    isValidArrayInput(input) {
+        if (!input.trim()) return false;
+        
+        // Check if input contains only numbers and commas
+        const regex = /^[\d,\s]+$/;
+        if (!regex.test(input)) return false;
+        
+        // Parse numbers
+        const numbers = input.split(',')
+            .map(num => parseInt(num.trim()))
+            .filter(num => !isNaN(num) && num >= 1 && num <= 1000);
+        
+        // Validate count
+        return numbers.length >= 5 && numbers.length <= 100;
+    }
+    
+    useCustomArray() {
+        const input = document.getElementById('customArray').value.trim();
+        const inputElement = document.getElementById('customArray');
+        
+        if (!input) {
+            inputElement.setCustomValidity('Please enter some numbers');
+            inputElement.reportValidity();
+            return;
+        }
+        
+        if (!this.isValidArrayInput(input)) {
+            inputElement.setCustomValidity('Please enter 5-100 numbers (1-1000) separated by commas');
+            inputElement.reportValidity();
+            return;
+        }
+        
+        inputElement.setCustomValidity('');
+        this.stopSorting();
+        
+        // Parse numbers
+        const numbers = input.split(',')
+            .map(num => parseInt(num.trim()))
+            .filter(num => !isNaN(num));
+        
+        // Update array size
+        this.arraySize = numbers.length;
+        document.getElementById('arraySize').value = numbers.length;
+        document.getElementById('sizeValue').textContent = numbers.length;
+        
+        // Create array
+        this.array = numbers.map(value => ({
+            value: value,
+            color: this.colors.default
+        }));
+        
+        this.resetStats();
+        this.draw();
     }
     
     async startSorting() {
@@ -606,102 +666,4 @@ class SortingVisualizer {
         
         if (right < n) {
             this.array[largest].color = this.colors.comparing;
-            this.array[right].color = this.colors.comparing;
-            this.comparisons++;
-            this.updateStats();
-            this.draw();
-            await this.sleep();
-            
-            if (this.array[right].value > this.array[largest].value) {
-                this.array[largest].color = this.colors.default;
-                largest = right;
-                this.array[largest].color = this.colors.comparing;
-            } else {
-                this.array[right].color = this.colors.default;
-                this.array[largest].color = this.colors.default;
-            }
-        }
-        
-        if (largest !== i) {
-            // Visualize swap
-            this.array[i].color = this.colors.swapping;
-            this.array[largest].color = this.colors.swapping;
-            this.draw();
-            await this.sleep();
-            
-            [this.array[i], this.array[largest]] = [this.array[largest], this.array[i]];
-            this.swaps++;
-            this.updateStats();
-            
-            this.draw();
-            await this.sleep();
-            
-            await this.heapify(n, largest);
-        }
-        
-        this.array[i].color = this.colors.default;
-        if (largest < n) this.array[largest].color = this.colors.default;
-    }
-    
-    draw() {
-        // Clear canvas
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        // Calculate bar dimensions
-        const barWidth = (this.canvas.width - 40) / this.array.length;
-        const maxHeight = Math.max(...this.array.map(item => item.value));
-        const scaleFactor = (this.canvas.height - 40) / maxHeight;
-        
-        // Draw bars
-        for (let i = 0; i < this.array.length; i++) {
-            const item = this.array[i];
-            const barHeight = item.value * scaleFactor;
-            const x = 20 + i * barWidth;
-            const y = this.canvas.height - barHeight - 20;
-            
-            // Draw bar
-            this.ctx.fillStyle = item.color;
-            this.ctx.fillRect(x, y, barWidth - 2, barHeight);
-            
-            // Draw bar border
-            this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-            this.ctx.lineWidth = 1;
-            this.ctx.strokeRect(x, y, barWidth - 2, barHeight);
-            
-            // Draw value on bar (only if bar is tall enough)
-            if (barHeight > 20) {
-                this.ctx.fillStyle = '#ffffff';
-                this.ctx.font = '12px Arial';
-                this.ctx.textAlign = 'center';
-                this.ctx.fillText(item.value.toString(), x + (barWidth - 2) / 2, y + 15);
-            }
-        }
-        
-        // Draw grid lines
-        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-        this.ctx.lineWidth = 1;
-        
-        // Horizontal grid lines
-        for (let i = 0; i <= 10; i++) {
-            const y = 20 + (this.canvas.height - 40) * (i / 10);
-            this.ctx.beginPath();
-            this.ctx.moveTo(20, y);
-            this.ctx.lineTo(this.canvas.width - 20, y);
-            this.ctx.stroke();
-        }
-        
-        // Vertical grid lines
-        for (let i = 0; i <= 10; i++) {
-            const x = 20 + (this.canvas.width - 40) * (i / 10);
-            this.ctx.beginPath();
-            this.ctx.moveTo(x, 20);
-            this.ctx.lineTo(x, this.canvas.height - 20);
-            this.ctx.stroke();
-        }
-    }
-}
-
-// Initialize the visualizer when page loads
-window.addEventListener('DOMContentLoaded', () => {
-    const visualizer = new SortingVisualizer();
-});
+            this.array[right].color = this.colors
