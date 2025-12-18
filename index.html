@@ -7,28 +7,30 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Sorting Algorithm Visualizer</h1>
+    <div class="container">
+        <h1>Sorting Algorithm Visualizer</h1>
+        <div class="controls">
+            <input type="text" id="arrayInput" placeholder="Enter your array (e.g. 5,3,8,1)">
+            <select id="algorithm">
+                <option value="bubble">Bubble Sort</option>
+                <option value="selection">Selection Sort</option>
+                <option value="insertion">Insertion Sort</option>
+                <option value="merge">Merge Sort</option>
+                <option value="quick">Quick Sort</option>
+                <option value="heap">Heap Sort</option>
+                <option value="counting">Counting Sort</option>
+                <option value="radix">Radix Sort</option>
+            </select>
+            <button onclick="startSort()">Sort</button>
+        </div>
 
-    <input type="text" id="arrayInput" placeholder="Enter array (e.g. 5,3,8,1)">
-    <br>
-    <select id="algorithm" title="Sorting Algorithm">
-        <option value="bubble">Bubble Sort</option>
-        <option value="selection">Selection Sort</option>
-        <option value="insertion">Insertion Sort</option>
-        <option value="merge">Merge Sort</option>
-        <option value="quick">Quick Sort</option>
-        <option value="heap">Heap Sort</option>
-        <option value="counting">Counting Sort</option>
-        <option value="radix">Radix Sort</option>
-    </select>
-    <button onclick="startSort()">Sort</button>
+        <div id="arrayContainer"></div>
 
-    <div id="arrayContainer"></div>
-
-    <div id="stats">
-        Comparisons: <span id="comparisons">0</span> |
-        Swaps: <span id="swaps">0</span> |
-        Time: <span id="time">0</span> ms
+        <div id="stats">
+            Comparisons: <span id="comparisons">0</span> |
+            Swaps: <span id="swaps">0</span> |
+            Time: <span id="time">0</span> ms
+        </div>
     </div>
 
     <script src="script.js"></script>

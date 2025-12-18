@@ -2,99 +2,98 @@
 /* General Body */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     margin: 0;
-    padding: 20px;
-    background-color: #f5f6fa;
+    padding: 0;
+    background: linear-gradient(to right, #1c92d2, #f2fcfe); /* original colored background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
-/* Title */
-h1 {
-    margin-bottom: 20px;
-    color: #2f3640;
+.container {
+    width: 90%;
+    max-width: 1000px;
     text-align: center;
 }
 
-/* Input and Controls */
-#arrayInput {
-    width: 300px;
-    padding: 8px 12px;
-    font-size: 16px;
-    border: 1px solid #dcdde1;
-    border-radius: 5px;
-    outline: none;
+h1 {
+    color: #fff;
+    margin-bottom: 20px;
 }
 
-select, button {
-    padding: 8px 15px;
-    margin: 10px 5px;
+.controls {
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    padding: 8px 12px;
+    width: 250px;
     font-size: 16px;
-    border: none;
     border-radius: 5px;
-    cursor: pointer;
+    border: none;
     outline: none;
 }
 
 select {
-    background-color: #f1f2f6;
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
 }
 
 button {
-    background-color: #40739e;
+    padding: 8px 20px;
+    font-size: 16px;
+    background-color: #ff4757;
+    border: none;
+    border-radius: 5px;
     color: #fff;
-    transition: background 0.3s;
+    cursor: pointer;
+    transition: all 0.3s;
 }
 
 button:hover {
-    background-color: #2f3640;
+    background-color: #e84118;
 }
 
-/* Array Container */
 #arrayContainer {
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    margin-top: 30px;
+    margin-top: 20px;
     height: 300px;
-    width: 100%;
-    max-width: 900px;
     border-radius: 10px;
-    border: 1px solid #dcdde1;
-    background-color: #fff;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 10px;
 }
 
-/* Bars */
 .bar {
     margin: 0 2px;
-    background-color: #3498db;
+    background-color: #ffa502;
     width: 20px;
-    transition: all 0.2s ease;
     border-radius: 3px 3px 0 0;
+    transition: all 0.2s ease;
 }
 
-/* Highlighted Bars */
 .bar.highlight {
-    background-color: #e84118 !important;
+    background-color: #ff4757 !important;
 }
 
-/* Stats */
 #stats {
     margin-top: 20px;
     font-size: 18px;
-    color: #2f3640;
+    color: #fff;
 }
 
 #stats span {
     font-weight: bold;
 }
 
-/* Responsive */
+/* Responsive for small screens */
 @media (max-width: 600px) {
-    #arrayInput {
+    input[type="text"] {
         width: 80%;
     }
     .bar {
