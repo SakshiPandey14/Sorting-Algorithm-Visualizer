@@ -1,62 +1,103 @@
-* {
-    box-sizing: border-box;
-}
-
+/* General Body */
 body {
-    margin: 0;
-    background: #0f2027;
-    color: white;
-    font-family: Arial, sans-serif;
-}
-
-.container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 20px;
-}
-
-h1 {
-    text-align: center;
-    color: #4fc3f7;
-    margin-bottom: 20px;
-}
-
-.controls {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 20px;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 20px;
+    background-color: #f5f6fa;
 }
 
-.controls input,
-.controls select,
-.controls button {
-    padding: 10px;
-    border-radius: 6px;
+/* Title */
+h1 {
+    margin-bottom: 20px;
+    color: #2f3640;
+    text-align: center;
+}
+
+/* Input and Controls */
+#arrayInput {
+    width: 300px;
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #dcdde1;
+    border-radius: 5px;
+    outline: none;
+}
+
+select, button {
+    padding: 8px 15px;
+    margin: 10px 5px;
+    font-size: 16px;
     border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+}
+
+select {
+    background-color: #f1f2f6;
 }
 
 button {
-    background: #4fc3f7;
-    cursor: pointer;
-    font-weight: bold;
+    background-color: #40739e;
+    color: #fff;
+    transition: background 0.3s;
 }
 
 button:hover {
-    background: #29b6f6;
+    background-color: #2f3640;
 }
 
-#sortingCanvas {
-    width: 100%;
-    height: 400px;
-    background: #111;
-    border-radius: 10px;
-}
-
-.stats {
+/* Array Container */
+#arrayContainer {
     display: flex;
-    justify-content: space-around;
-    margin-top: 15px;
+    align-items: flex-end;
+    justify-content: center;
+    margin-top: 30px;
+    height: 300px;
+    width: 100%;
+    max-width: 900px;
+    border-radius: 10px;
+    border: 1px solid #dcdde1;
+    background-color: #fff;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Bars */
+.bar {
+    margin: 0 2px;
+    background-color: #3498db;
+    width: 20px;
+    transition: all 0.2s ease;
+    border-radius: 3px 3px 0 0;
+}
+
+/* Highlighted Bars */
+.bar.highlight {
+    background-color: #e84118 !important;
+}
+
+/* Stats */
+#stats {
+    margin-top: 20px;
     font-size: 18px;
+    color: #2f3640;
+}
+
+#stats span {
+    font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    #arrayInput {
+        width: 80%;
+    }
+    .bar {
+        width: 12px;
+        margin: 0 1px;
+    }
 }
