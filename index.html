@@ -2,121 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sorting Algorithm Visualizer</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1><i class="fas fa-sort-amount-down"></i> Sorting Algorithm Visualizer</h1>
-            <p class="subtitle">Watch algorithms dance! Step-by-step visualization of sorting algorithms</p>
-        </header>
 
-        <div class="controls">
-            <div class="control-group">
-                <label for="algorithm"><i class="fas fa-code"></i> Algorithm:</label>
-                <select id="algorithm">
-                    <option value="bubble">Bubble Sort</option>
-                    <option value="selection">Selection Sort</option>
-                    <option value="insertion">Insertion Sort</option>
-                    <option value="merge">Merge Sort</option>
-                    <option value="quick">Quick Sort</option>
-                    <option value="heap">Heap Sort</option>
-                </select>
-            </div>
+<div class="container">
+    <h1>Sorting Algorithm Visualizer</h1>
 
-            <div class="control-group">
-                <label for="arraySize"><i class="fas fa-sliders-h"></i> Array Size:</label>
-                <input type="range" id="arraySize" min="5" max="100" value="30">
-                <span id="sizeValue">30</span>
-            </div>
+    <div class="controls">
+        <select id="algorithm">
+            <option value="bubble">Bubble Sort</option>
+            <option value="selection">Selection Sort</option>
+            <option value="insertion">Insertion Sort</option>
+        </select>
 
-            <div class="control-group">
-                <label for="speed"><i class="fas fa-tachometer-alt"></i> Speed:</label>
-                <input type="range" id="speed" min="1" max="100" value="50">
-                <span id="speedValue">Medium</span>
-            </div>
+        <input type="range" id="arraySize" min="5" max="100" value="30">
+        <span id="sizeValue">30</span>
 
-            <!-- NEW: Custom Array Input -->
-            <div class="control-group">
-                <label for="customArray"><i class="fas fa-edit"></i> Custom Array:</label>
-                <div class="custom-array-input">
-                    <input type="text" id="customArray" placeholder="e.g., 45,23,78,12,56" 
-                           pattern="^[\d,\s]+$" title="Comma-separated numbers only">
-                    <button id="useCustomArray" class="btn btn-small">
-                        <i class="fas fa-check"></i> Use
-                    </button>
-                </div>
-                <small class="hint">Enter 5-100 numbers (1-1000) separated by commas</small>
-            </div>
+        <input type="range" id="speed" min="1" max="100" value="50">
 
-            <div class="control-group">
-                <button id="generateArray" class="btn"><i class="fas fa-random"></i> New Array</button>
-                <button id="startSort" class="btn btn-primary"><i class="fas fa-play"></i> Sort</button>
-                <button id="pauseSort" class="btn"><i class="fas fa-pause"></i> Pause</button>
-                <button id="reset" class="btn"><i class="fas fa-redo"></i> Reset</button>
-            </div>
-        </div>
+        <input type="text" id="customArray" placeholder="e.g. 5,3,8,2,1">
+        <button id="useCustomArray">Use Custom Array</button>
 
-        <div class="stats">
-            <div class="stat">
-                <span class="stat-label">Comparisons:</span>
-                <span id="comparisons" class="stat-value">0</span>
-            </div>
-            <div class="stat">
-                <span class="stat-label">Swaps:</span>
-                <span id="swaps" class="stat-value">0</span>
-            </div>
-            <div class="stat">
-                <span class="stat-label">Time:</span>
-                <span id="time" class="stat-value">0 ms</span>
-            </div>
-            <div class="stat">
-                <span class="stat-label">Complexity:</span>
-                <span id="complexity" class="stat-value">O(n²)</span>
-            </div>
-        </div>
-
-        <div class="visualization-container">
-            <canvas id="sortingCanvas"></canvas>
-            <div class="legend">
-                <div class="legend-item">
-                    <div class="color-box comparing"></div>
-                    <span>Comparing</span>
-                </div>
-                <div class="legend-item">
-                    <div class="color-box swapping"></div>
-                    <span>Swapping</span>
-                </div>
-                <div class="legend-item">
-                    <div class="color-box sorted"></div>
-                    <span>Sorted</span>
-                </div>
-                <div class="legend-item">
-                    <div class="color-box pivot"></div>
-                    <span>Pivot</span>
-                </div>
-                <div class="legend-item">
-                    <div class="color-box default"></div>
-                    <span>Unsorted</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="explanation">
-            <h3><i class="fas fa-info-circle"></i> Algorithm Explanation</h3>
-            <div id="algorithmExplanation">
-                <p>Select an algorithm to see its explanation here.</p>
-            </div>
-        </div>
-
-        <footer>
-            <p>Built with HTML5 Canvas & JavaScript | DSA Visualization Project</p>
-        </footer>
+        <button id="generateArray">New Array</button>
+        <button id="startSort">Sort</button>
+        <button id="pauseSort">Pause</button>
+        <button id="reset">Reset</button>
     </div>
 
-    <script src="script.js"></script>
+    <canvas id="sortingCanvas"></canvas>
+
+    <div class="stats">
+        <p>Comparisons: <span id="comparisons">0</span></p>
+        <p>Swaps: <span id="swaps">0</span></p>
+        <p>Time: <span id="time">0 ms</span></p>
+    </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
