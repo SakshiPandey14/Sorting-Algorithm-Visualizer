@@ -4,7 +4,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background: linear-gradient(to right, #1c92d2, #f2fcfe); /* original colored background */
+    background: linear-gradient(to right, #080e12, #f2fcfe); /* original colored background */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -84,7 +84,7 @@ button:hover {
 #stats {
     margin-top: 20px;
     font-size: 18px;
-    color: #fff;
+    color: #140d0d;
 }
 
 #stats span {
