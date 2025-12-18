@@ -10,7 +10,7 @@ function drawArray(arr, highlight = []) {
         const bar = document.createElement("div");
         bar.classList.add("bar");
         bar.style.height = arr[i] * 5 + "px";
-        if (highlight.includes(i)) bar.style.backgroundColor = "red";
+        if (highlight.includes(i)) bar.classList.add("highlight");
         container.appendChild(bar);
     }
 }
@@ -152,10 +152,8 @@ async function heapify(arr, n, i) {
     let largest = i;
     let l = 2 * i + 1;
     let r = 2 * i + 2;
-    if (l < n && arr[l] > arr[largest]) comparisons++;
-    if (l < n && arr[l] > arr[largest]) largest = l;
-    if (r < n && arr[r] > arr[largest]) comparisons++;
-    if (r < n && arr[r] > arr[largest]) largest = r;
+    if (l < n) { comparisons++; if(arr[l] > arr[largest]) largest = l; }
+    if (r < n) { comparisons++; if(arr[r] > arr[largest]) largest = r; }
     if (largest !== i) {
         swaps++;
         [arr[i], arr[largest]] = [arr[largest], arr[i]];
