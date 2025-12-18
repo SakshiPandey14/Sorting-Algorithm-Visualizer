@@ -7,7 +7,6 @@ class SortingVisualizer {
         this.array = [];
         this.arraySize = 30;
         this.speed = 50;
-
         this.isSorting = false;
         this.isPaused = false;
 
@@ -19,16 +18,17 @@ class SortingVisualizer {
             default: "#4fc3f7",
             comparing: "#ffeb3b",
             swapping: "#f44336",
-            sorted: "#4caf50"
+            sorted: "#4caf50",
+            pivot: "#9c27b0"
         };
 
-        this.resizeCanvas();
+        this.resize();
         this.generateArray();
-        this.addEvents();
+        this.events();
         this.draw();
     }
 
-    resizeCanvas() {
+    resize() {
         this.canvas.width = this.canvas.clientWidth;
         this.canvas.height = 400;
     }
@@ -61,16 +61,16 @@ class SortingVisualizer {
         }
     }
 
-    addEvents() {
-        document.getElementById("arraySize").addEventListener("input", e => {
+    events() {
+        document.getElementById("arraySize").oninput = e => {
             this.arraySize = +e.target.value;
             document.getElementById("sizeValue").textContent = this.arraySize;
             this.generateArray();
-        });
+        };
 
-        document.getElementById("speed").addEventListener("input", e => {
+        document.getElementById("speed").oninput = e => {
             this.speed = +e.target.value;
-        });
+        };
 
         document.getElementById("generateArray").onclick = () => {
             this.stop();
@@ -78,7 +78,7 @@ class SortingVisualizer {
         };
 
         document.getElementById("startSort").onclick = () => {
-            if (!this.isSorting) this.startSort();
+            if (!this.isSorting) this.start();
         };
 
         document.getElementById("pauseSort").onclick = () => {
@@ -91,49 +91,26 @@ class SortingVisualizer {
         };
 
         document.getElementById("useCustomArray").onclick = () => {
-            this.useCustomArray();
+            const input = document.getElementById("customArray").value;
+            const nums = input.split(",").map(n => parseInt(n.trim()));
+            if (nums.length < 5 || nums.some(isNaN)) {
+                alert("Invalid input");
+                return;
+            }
+            this.stop();
+            this.array = nums.map(v => ({
+                value: v,
+                color: this.colors.default
+            }));
+            this.draw();
         };
-    }
-
-    useCustomArray() {
-        const input = document.getElementById("customArray").value;
-        const nums = input.split(",").map(n => parseInt(n.trim()));
-        if (nums.length < 5 || nums.some(isNaN)) {
-            alert("Enter valid comma separated numbers (min 5)");
-            return;
-        }
-
-        this.stop();
-        this.array = nums.map(v => ({
-            value: v,
-            color: this.colors.default
-        }));
-        this.arraySize = nums.length;
-        this.draw();
     }
 
     async sleep() {
         while (this.isPaused) {
             await new Promise(r => setTimeout(r, 100));
         }
-        return new Promise(r =>
-            setTimeout(r, Math.max(5, 110 - this.speed))
-        );
-    }
-
-    async startSort() {
-        this.isSorting = true;
-        this.startTime = Date.now();
-        this.resetStats();
-
-        const algo = document.getElementById("algorithm").value;
-        if (algo === "bubble") await this.bubbleSort();
-        if (algo === "selection") await this.selectionSort();
-        if (algo === "insertion") await this.insertionSort();
-
-        this.array.forEach(el => (el.color = this.colors.sorted));
-        this.draw();
-        this.isSorting = false;
+        return new Promise(r => setTimeout(r, Math.max(5, 110 - this.speed)));
     }
 
     stop() {
@@ -141,43 +118,53 @@ class SortingVisualizer {
         this.isPaused = false;
     }
 
+    async start() {
+        this.isSorting = true;
+        this.startTime = Date.now();
+        this.resetStats();
+
+        const algo = document.getElementById("algorithm").value;
+
+        if (algo === "bubble") await this.bubbleSort();
+        if (algo === "selection") await this.selectionSort();
+        if (algo === "insertion") await this.insertionSort();
+        if (algo === "merge") await this.mergeSort(0, this.array.length - 1);
+        if (algo === "quick") await this.quickSort(0, this.array.length - 1);
+        if (algo === "heap") await this.heapSort();
+        if (algo === "counting") await this.countingSort();
+        if (algo === "radix") await this.radixSort();
+
+        this.array.forEach(e => e.color = this.colors.sorted);
+        this.draw();
+        this.isSorting = false;
+    }
+
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        const barWidth = this.canvas.width / this.array.length;
-        const maxVal = Math.max(...this.array.map(e => e.value));
+        const w = this.canvas.width / this.array.length;
+        const max = Math.max(...this.array.map(e => e.value));
 
-        this.array.forEach((el, i) => {
-            const height = (el.value / maxVal) * (this.canvas.height - 20);
-            this.ctx.fillStyle = el.color;
-            this.ctx.fillRect(
-                i * barWidth,
-                this.canvas.height - height,
-                barWidth - 2,
-                height
-            );
+        this.array.forEach((e, i) => {
+            const h = (e.value / max) * (this.canvas.height - 20);
+            this.ctx.fillStyle = e.color;
+            this.ctx.fillRect(i * w, this.canvas.height - h, w - 2, h);
         });
     }
 
+    // -------- BASIC SORTS --------
     async bubbleSort() {
         for (let i = 0; i < this.array.length; i++) {
             for (let j = 0; j < this.array.length - i - 1; j++) {
                 if (!this.isSorting) return;
-
-                this.array[j].color = this.array[j + 1].color = this.colors.comparing;
                 this.comparisons++;
-                this.draw();
-                await this.sleep();
-
                 if (this.array[j].value > this.array[j + 1].value) {
                     [this.array[j], this.array[j + 1]] =
                         [this.array[j + 1], this.array[j]];
                     this.swaps++;
                 }
-
-                this.array[j].color = this.array[j + 1].color = this.colors.default;
-                this.updateStats();
+                this.draw();
+                await this.sleep();
             }
-            this.array[this.array.length - i - 1].color = this.colors.sorted;
         }
     }
 
@@ -185,22 +172,13 @@ class SortingVisualizer {
         for (let i = 0; i < this.array.length; i++) {
             let min = i;
             for (let j = i + 1; j < this.array.length; j++) {
-                if (!this.isSorting) return;
-
-                this.array[j].color = this.colors.comparing;
                 this.comparisons++;
-                this.draw();
-                await this.sleep();
-
                 if (this.array[j].value < this.array[min].value) min = j;
-                this.array[j].color = this.colors.default;
+                await this.sleep();
             }
-
             [this.array[i], this.array[min]] =
                 [this.array[min], this.array[i]];
             this.swaps++;
-            this.array[i].color = this.colors.sorted;
-            this.updateStats();
             this.draw();
         }
     }
@@ -209,19 +187,110 @@ class SortingVisualizer {
         for (let i = 1; i < this.array.length; i++) {
             let key = this.array[i];
             let j = i - 1;
-
             while (j >= 0 && this.array[j].value > key.value) {
-                if (!this.isSorting) return;
-
                 this.array[j + 1] = this.array[j];
                 j--;
-                this.comparisons++;
                 this.swaps++;
                 this.draw();
                 await this.sleep();
             }
             this.array[j + 1] = key;
-            this.updateStats();
+        }
+    }
+
+    // -------- ADVANCED SORTS --------
+    async mergeSort(l, r) {
+        if (l >= r || !this.isSorting) return;
+        let m = Math.floor((l + r) / 2);
+        await this.mergeSort(l, m);
+        await this.mergeSort(m + 1, r);
+
+        let left = this.array.slice(l, m + 1);
+        let right = this.array.slice(m + 1, r + 1);
+        let i = 0, j = 0, k = l;
+
+        while (i < left.length && j < right.length) {
+            this.array[k++] = left[i].value < right[j].value ? left[i++] : right[j++];
+            this.draw();
+            await this.sleep();
+        }
+        while (i < left.length) this.array[k++] = left[i++];
+        while (j < right.length) this.array[k++] = right[j++];
+    }
+
+    async quickSort(l, r) {
+        if (l >= r || !this.isSorting) return;
+        let p = this.array[r].value;
+        let i = l;
+        for (let j = l; j < r; j++) {
+            if (this.array[j].value < p) {
+                [this.array[i], this.array[j]] = [this.array[j], this.array[i]];
+                i++;
+            }
+        }
+        [this.array[i], this.array[r]] = [this.array[r], this.array[i]];
+        this.draw();
+        await this.sleep();
+        await this.quickSort(l, i - 1);
+        await this.quickSort(i + 1, r);
+    }
+
+    async heapSort() {
+        const n = this.array.length;
+        for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+            await this.heapify(n, i);
+        }
+        for (let i = n - 1; i > 0; i--) {
+            [this.array[0], this.array[i]] = [this.array[i], this.array[0]];
+            this.draw();
+            await this.sleep();
+            await this.heapify(i, 0);
+        }
+    }
+
+    async heapify(n, i) {
+        let largest = i;
+        let l = 2 * i + 1, r = 2 * i + 2;
+        if (l < n && this.array[l].value > this.array[largest].value) largest = l;
+        if (r < n && this.array[r].value > this.array[largest].value) largest = r;
+        if (largest !== i) {
+            [this.array[i], this.array[largest]] =
+                [this.array[largest], this.array[i]];
+            this.draw();
+            await this.sleep();
+            await this.heapify(n, largest);
+        }
+    }
+
+    async countingSort() {
+        let max = Math.max(...this.array.map(e => e.value));
+        let count = new Array(max + 1).fill(0);
+        this.array.forEach(e => count[e.value]++);
+        let idx = 0;
+        for (let i = 0; i < count.length; i++) {
+            while (count[i]--) {
+                this.array[idx++].value = i;
+                this.draw();
+                await this.sleep();
+            }
+        }
+    }
+
+    async radixSort() {
+        let max = Math.max(...this.array.map(e => e.value));
+        for (let exp = 1; Math.floor(max / exp) > 0; exp *= 10) {
+            let output = [];
+            let count = new Array(10).fill(0);
+
+            this.array.forEach(e => count[Math.floor(e.value / exp) % 10]++);
+            for (let i = 1; i < 10; i++) count[i] += count[i - 1];
+            for (let i = this.array.length - 1; i >= 0; i--) {
+                let d = Math.floor(this.array[i].value / exp) % 10;
+                output[--count[d]] = this.array[i];
+            }
+            this.array = output;
+            this.draw();
+            await this.sleep();
         }
     }
 }
