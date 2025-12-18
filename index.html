@@ -2,110 +2,72 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Sorting Algorithm Visualizer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Styles -->
-    <link rel="stylesheet" href="style.css">
+    <title>Sorting Visualizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        #arrayInput {
+            width: 300px;
+            padding: 5px;
+        }
+        select, button {
+            padding: 5px 10px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        #arrayContainer {
+            display: flex;
+            align-items: flex-end;
+            margin-top: 30px;
+            height: 300px;
+            width: 100%;
+            max-width: 900px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+        .bar {
+            margin: 0 2px;
+            background-color: #3498db;
+            width: 20px;
+        }
+        #stats {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
+    <h1>Sorting Algorithm Visualizer</h1>
+    <input type="text" id="arrayInput" placeholder="Enter array (e.g. 5,3,8,1)">
+    <br>
+    <select id="algorithm">
+        <option value="bubble">Bubble Sort</option>
+        <option value="selection">Selection Sort</option>
+        <option value="insertion">Insertion Sort</option>
+        <option value="merge">Merge Sort</option>
+        <option value="quick">Quick Sort</option>
+        <option value="heap">Heap Sort</option>
+        <option value="counting">Counting Sort</option>
+        <option value="radix">Radix Sort</option>
+    </select>
+    <button onclick="startSort()">Sort</button>
+    <div id="arrayContainer"></div>
+    <div id="stats">
+        Comparisons: <span id="comparisons">0</span> |
+        Swaps: <span id="swaps">0</span> |
+        Time: <span id="time">0</span> ms
+    </div>
 
-<div class="container">
-
-    <!-- HEADER -->
-    <header>
-        <h1>Sorting Algorithm Visualizer</h1>
-        <p class="subtitle">
-            Visualize how different sorting algorithms work step by step
-        </p>
-    </header>
-
-    <!-- CONTROLS -->
-    <section class="controls">
-
-        <!-- Algorithm Selection -->
-        <div class="control-group">
-            <label for="algorithm">Select Sorting Algorithm</label>
-            <select id="algorithm">
-                <option value="bubble">Bubble Sort</option>
-                <option value="selection">Selection Sort</option>
-                <option value="insertion">Insertion Sort</option>
-                <option value="merge">Merge Sort</option>
-                <option value="quick">Quick Sort</option>
-                <option value="heap">Heap Sort</option>
-                <option value="counting">Counting Sort</option>
-                <option value="radix">Radix Sort</option>
-            </select>
-        </div>
-
-        <!-- Array Size -->
-        <div class="control-group">
-            <label for="arraySize">Array Size</label>
-            <input type="range" id="arraySize" min="5" max="100" value="30">
-            <span id="sizeValue">30</span>
-        </div>
-
-        <!-- Speed -->
-        <div class="control-group">
-            <label for="speed">Visualization Speed</label>
-            <input type="range" id="speed" min="1" max="100" value="50">
-        </div>
-
-        <!-- Custom Array Input -->
-        <div class="control-group">
-            <label for="customArray">Enter Your Own Array</label>
-            <input 
-                type="text"
-                id="customArray"
-                placeholder="Enter numbers separated by commas (e.g. 10, 4, 25, 7)"
-            >
-            <button id="useCustomArray">Use This Array</button>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="control-group buttons">
-            <button id="generateArray">Generate Random Array</button>
-            <button id="startSort">Start Sorting</button>
-            <button id="pauseSort">Pause / Resume</button>
-            <button id="reset">Reset</button>
-        </div>
-
-    </section>
-
-    <!-- CANVAS -->
-    <section class="visualization">
-        <canvas id="sortingCanvas"></canvas>
-    </section>
-
-    <!-- STATISTICS -->
-    <section class="stats">
-        <div class="stat-box">
-            <span class="stat-label">Comparisons</span>
-            <span id="comparisons" class="stat-value">0</span>
-        </div>
-
-        <div class="stat-box">
-            <span class="stat-label">Swaps</span>
-            <span id="swaps" class="stat-value">0</span>
-        </div>
-
-        <div class="stat-box">
-            <span class="stat-label">Execution Time</span>
-            <span id="time" class="stat-value">0 ms</span>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer>
-        <p>
-            Built using HTML, CSS and JavaScript | Data Structures & Algorithms Project
-        </p>
-    </footer>
-
-</div>
-
-<!-- Script -->
-<script src="script.js"></script>
-
+    <script src="script.js"></script>
 </body>
 </html>
